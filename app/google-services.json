@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "267643212187",
+    "project_id": "qrescue-84b4f",
+    "storage_bucket": "qrescue-84b4f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267643212187:android:8d9cdf0ff727398519113e",
+        "android_client_info": {
+          "package_name": "com.example.qrescuer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtOKVFNmUBfKbTF63-KsjSQL5G-uJpVOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -39,7 +39,7 @@
             android:exported="true" />
         <activity
             android:name=".MyCaptureActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="fullSensor" />
     </application>
 
 </manifest>

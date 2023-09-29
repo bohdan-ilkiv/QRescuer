@@ -28,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         auth = FirebaseAuth.getInstance();
-        button.findViewById(R.id.logout);
-        textView.findViewById(R.id.user_details);
+        button = findViewById(R.id.logout); // Initialize the button view
+        textView = findViewById(R.id.user_details); // Initialize the textView view
         user = auth.getCurrentUser();
 
-        if(user == null){
+        if (user == null) {
             Intent intent = new Intent(getApplicationContext(), Login.class);
             startActivity(intent);
             finish();
@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
         btnScan.setOnClickListener(v -> ScanCode());
     }
+
 
     private void ScanCode() {
         IntentIntegrator integrator = new IntentIntegrator(this);

@@ -11,8 +11,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -68,14 +73,52 @@ public class MainActivity extends AppCompatActivity {
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
+        // Inside your onActivityResult method
         if (result != null) {
             if (result.getContents() != null) {
-                String contents = result.getContents();
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Result");
-                builder.setMessage(contents);
-                builder.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss()).show();
+                String buildingId = result.getContents(); // Assuming the QR code contains the Firestore document ID
+
+                // Query Firestore using the Firestore document ID
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                DocumentReference buildingRef = db.collection("buildings").document(buildingId);
+
+                buildingRef.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Retrieve building information
+                            String address = document.getString("Address");
+                            int numResidents = Objects.requireNonNull(document.getLong("numResidents")).intValue();
+                            String fireExits = document.getString("fireExits");
+                            String disabledResidents = document.getString("disabledResidents");
+
+                            // Start the 'Information' activity and pass the data as extras
+                            Intent intent = new Intent(MainActivity.this, Information.class);
+                            intent.putExtra("buildingId", buildingId);
+                            intent.putExtra("address", address);
+                            intent.putExtra("numResidents", numResidents);
+                            intent.putExtra("fireExits", fireExits);
+                            intent.putExtra("disabledResidents", disabledResidents);
+                            startActivity(intent);
+                        } else {
+                            // Building document does not exist
+                            showErrorMessage("Building not found");
+                        }
+                    } else {
+                        // Handle other errors
+                        showErrorMessage("Error fetching building data");
+                    }
+                });
             }
         }
+
     }
+    // Define a method to show an error message
+    private void showErrorMessage(String message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Error");
+        builder.setMessage(message);
+        builder.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss()).show();
+    }
+
 }

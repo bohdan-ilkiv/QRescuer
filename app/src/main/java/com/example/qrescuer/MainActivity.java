@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
 
-        // Inside your onActivityResult method
         if (result != null) {
             if (result.getContents() != null) {
                 String buildingId = result.getContents(); // Assuming the QR code contains the Firestore document ID
